@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { EventService } from '../services/event.service';
 import { StatusCodes } from 'http-status-codes';
+import { TypeDayOfWeek } from '../interfaces/event.interface';
 
 export class EventController {
     private service: EventService;
@@ -13,7 +14,7 @@ export class EventController {
 
     public async getEvents(req: Request, res: Response) {
         const events = await this.service.getEvents(
-            req.query.daysofweek as string,
+            req.query.dayOfWeek as TypeDayOfWeek,
         );
         res.status(StatusCodes.OK).json(events);
     }
