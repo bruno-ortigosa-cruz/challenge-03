@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import { IEvent } from '../interfaces/event.interface';
 
 export const EventSchema = new Schema<IEvent>(
@@ -8,6 +8,9 @@ export const EventSchema = new Schema<IEvent>(
         },
         dayOfWeek: {
             type: String,
+        },
+        userId: {
+            type: mongoose.Types.ObjectId,
         },
     },
     { versionKey: false },

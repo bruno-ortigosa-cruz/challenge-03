@@ -12,9 +12,9 @@ export type DayOfWeek =
 export interface IEvent extends Document {
     description: string;
     dayOfWeek: DayOfWeek;
+    userId: mongoose.ObjectId;
 }
 
 export interface IReturnEvent extends IEvent {
     _id: mongoose.ObjectId;
-    userId: mongoose.ObjectId;
 }
