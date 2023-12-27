@@ -9,7 +9,9 @@ export class EventService {
     public async getEvents(weekdayQuery: string): Promise<IEvent[]> {
         if (!weekdayQuery) {
             return await this.eventRepository.getAllEvents();
-        } else return [];
+        } else {
+            return await this.eventRepository.getQueryEvents(weekdayQuery);
+        }
     }
 
     public async createEvent(payload: IEvent) {
