@@ -1,5 +1,5 @@
 import { IEvent, IReturnEvent } from '../interfaces/event.interface';
-import { EventModel } from '../models/event.model';
+import { EventModel } from './models/event.model';
 
 export class EventRepository {
     constructor() {}
@@ -11,7 +11,7 @@ export class EventRepository {
     public async createEvent(payload: IEvent): Promise<IReturnEvent> {
         console.log(payload);
         const algo = await EventModel.create(payload);
-        console.log(algo)
-        return algo
+        console.log(algo);
+        return algo;
     }
 }
