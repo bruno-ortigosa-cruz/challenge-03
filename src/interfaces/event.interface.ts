@@ -1,6 +1,6 @@
 import mongoose, { Document } from 'mongoose';
 
-type DayOfWeek =
+export type DayOfWeek =
     | 'sunday'
     | 'monday'
     | 'tuesday'
