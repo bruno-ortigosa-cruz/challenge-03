@@ -1,5 +1,6 @@
 import {
     IEvent,
+    IReturnEvent,
     TypeDayOfWeek,
 } from '../../helpers/interfaces/event.interface';
 import { EventRepository } from '../../infra/repositories/event.repository';
@@ -15,6 +16,14 @@ export class EventService {
         } else {
             return await this.eventRepository.getQuery(weekdayQuery);
         }
+    }
+
+    public async getById(id: string): Promise<IReturnEvent> {
+        const event = await this.eventRepository.getById(id);
+
+        if (!event) throw new Error('Não achou o evento não meu consagrado');
+
+        return event;
     }
 
     public async createEvent(payload: IEvent) {
