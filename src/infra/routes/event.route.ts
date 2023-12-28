@@ -12,10 +12,11 @@ export class EventRoutes {
         this.setRoute();
     }
 
-    private setRoute() {
-        this.router.get(this.generalRoute, this.controller.getByDay);
-        this.router.get(this.idRoute, this.controller.getById);
+    private setRoute(): void {
+        this.router.get(this.generalRoute, this.controller.get);
+        this.router.get(this.idRoute, this.controller.get);
         this.router.post(this.generalRoute, this.controller.create);
         this.router.delete(this.generalRoute, this.controller.remove);
+        this.router.delete(this.idRoute, this.controller.remove);
     }
 }
