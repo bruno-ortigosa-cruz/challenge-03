@@ -1,8 +1,8 @@
 import 'dotenv/config';
-import { IEnv } from './interfaces/env.interface';
+import { IEnv } from './helpers/interfaces/env.interface';
 import { cleanEnv, port, str } from 'envalid';
 import { App } from './app';
-import { Database } from './infra/database.infra';
+import { Database } from './infra/database/database.db';
 
 class Server {
     private prefix: string = '/api/v1';

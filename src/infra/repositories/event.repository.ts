@@ -4,8 +4,8 @@ import {
     IEvent,
     IReturnEvent,
     TypeDayOfWeek,
-} from '../interfaces/event.interface';
-import { EventModel } from './models/event.model';
+} from '../../helpers/interfaces/event.interface';
+import { EventModel } from '../database/models/event.model';
 
 export class EventRepository {
     private model: Model<IEvent>;

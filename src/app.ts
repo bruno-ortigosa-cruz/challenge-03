@@ -1,6 +1,6 @@
 import 'express-async-errors';
 import express from 'express';
-import { EventRoutes } from './routes/event.route';
+import { EventRoutes } from './infra/routes/event.route';
 
 export class App {
     public readonly app = express();

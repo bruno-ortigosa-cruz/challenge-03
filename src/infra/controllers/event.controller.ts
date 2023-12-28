@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { EventService } from '../services/event.service';
+import { EventService } from '../../domains/services/event.service';
 import { StatusCodes } from 'http-status-codes';
-import { TypeDayOfWeek } from '../interfaces/event.interface';
+import { TypeDayOfWeek } from '../../helpers/interfaces/event.interface';
 
 export class EventController {
     private service: EventService;

@@ -1,5 +1,8 @@
-import { IEvent, TypeDayOfWeek } from '../interfaces/event.interface';
-import { EventRepository } from '../repositories/event.repository';
+import {
+    IEvent,
+    TypeDayOfWeek,
+} from '../../helpers/interfaces/event.interface';
+import { EventRepository } from '../../infra/repositories/event.repository';
 
 export class EventService {
     private eventRepository = new EventRepository();
