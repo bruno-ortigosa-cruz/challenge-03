@@ -1,18 +1,40 @@
-import { IEvent, IReturnEvent } from '../interfaces/event.interface';
+import { Model } from 'mongoose';
+import {
+    IDeletedEvents,
+    IEvent,
+    IReturnEvent,
+    TypeDayOfWeek,
+} from '../interfaces/event.interface';
 import { EventModel } from './models/event.model';
 
 export class EventRepository {
-    constructor() {}
+    private model: Model<IEvent>;
 
-    public async getAllEvents(): Promise<IEvent[]> {
-        return await EventModel.find({});
+    constructor() {
+        this.model = EventModel;
     }
 
-    public async getQueryEvents(query: string): Promise<IEvent[]> {
-        return await EventModel.find({ dayOfWeek: query });
+    public async getAll(): Promise<IEvent[]> {
+        return await this.model.find({});
     }
 
-    public async createEvent(payload: IEvent): Promise<IReturnEvent> {
-        return await EventModel.create(payload);
+    public async getQuery(query: TypeDayOfWeek): Promise<IReturnEvent[]> {
+        return await this.model.find({ dayOfWeek: query });
+    }
+
+    public async create(payload: IEvent): Promise<IReturnEvent> {
+        return await this.model.create(payload);
+    }
+
+    public async remove(query: TypeDayOfWeek): Promise<IDeletedEvents> {
+        const eventsToBeDeleted: IReturnEvent[] = await this.getQuery(query);
+
+        await this.model.deleteMany({ dayOfWeek: query });
+
+        const deleteResponse: IDeletedEvents = {
+            deletedEvents: eventsToBeDeleted,
+        };
+
+        return deleteResponse;
     }
 }
