@@ -22,3 +22,8 @@ export interface IReturnEvent extends IEvent {
 export interface IDeletedEvents {
     deletedEvents: IReturnEvent[];
 }
+
+export interface IDeleteResponse {
+   acknowledged: boolean;
+   deletedCount: number;
+}
