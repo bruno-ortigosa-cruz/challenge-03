@@ -16,4 +16,7 @@ export interface IUserRequest extends IUser {
 
 export interface IUserResponse extends Omit<IUser, 'password'> {
     _id: mongoose.ObjectId;
+    password?: string;
 }
+
+export interface IUserNoPassword extends Omit<IUserResponse, 'password'> {}
