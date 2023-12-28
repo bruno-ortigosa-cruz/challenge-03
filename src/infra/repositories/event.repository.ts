@@ -14,8 +14,12 @@ export class EventRepository {
         this.model = EventModel;
     }
 
-    public async getAll(): Promise<IEvent[]> {
+    public async getAll(): Promise<IReturnEvent[]> {
         return await this.model.find({});
+    }
+
+    public async getById(id: string): Promise<IReturnEvent | null> {
+        return await this.model.findById(id);
     }
 
     public async getQuery(query: TypeDayOfWeek): Promise<IReturnEvent[]> {
