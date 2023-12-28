@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 export interface IUser extends Document {
     firstName: string;
@@ -8,5 +8,12 @@ export interface IUser extends Document {
     country: string;
     email: string;
     password: string;
+}
+
+export interface IUserRequest extends IUser {
     confirmPassword: string;
+}
+
+export interface IUserResponse extends Omit<IUser, 'password'> {
+    _id: mongoose.ObjectId;
 }
