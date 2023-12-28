@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import {
     IEvent,
     IReturnEvent,
@@ -10,27 +11,45 @@ export class EventService {
 
     constructor() {}
 
-    public async get(weekdayQuery: TypeDayOfWeek): Promise<IEvent[]> {
-        if (!weekdayQuery) {
-            return await this.eventRepository.getAll();
-        } else {
-            return await this.eventRepository.getQuery(weekdayQuery);
+    public async get(req: Request): Promise<IReturnEvent[] | IReturnEvent> {
+        const id: string = req.params.id;
+        const weekdayQuery: TypeDayOfWeek = req.query
+            .dayOfWeek as TypeDayOfWeek;
+
+        if (id) {
+            const event = await this.eventRepository.getById(id);
+
+            if (!event) {
+                throw new Error('Não achou o evento não meu consagrado');
+            }
+            return event;
         }
-    }
 
-    public async getById(id: string): Promise<IReturnEvent> {
-        const event = await this.eventRepository.getById(id);
+        if (!weekdayQuery) return await this.eventRepository.getAll();
 
-        if (!event) throw new Error('Não achou o evento não meu consagrado');
-
-        return event;
+        return await this.eventRepository.getQuery(weekdayQuery);
     }
 
     public async createEvent(payload: IEvent) {
         return await this.eventRepository.create(payload);
     }
 
-    public async remove(weekdayQuery: TypeDayOfWeek) {
-        return await this.eventRepository.remove(weekdayQuery);
+    public async remove(req: Request) {
+        const id = req.params.id;
+        const weekdayQuery: TypeDayOfWeek = req.query
+            .dayOfWeek as TypeDayOfWeek;
+
+        if (id) {
+            const deletedEvent = await this.eventRepository.removeById(id);
+            if (!deletedEvent) {
+                throw new Error('Não achou o evento não meu consagrado');
+            }
+
+            return null;
+        }
+
+        if (!weekdayQuery) throw new Error('sem query meu patrão');
+
+        return await this.eventRepository.removeByDay(weekdayQuery);
     }
 }
