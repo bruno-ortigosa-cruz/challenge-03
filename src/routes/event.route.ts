@@ -12,7 +12,8 @@ export class EventRoutes {
     }
 
     private setRoute() {
-        this.router.get(this.generalRoute, this.controller.getEvents);
-        this.router.post(this.generalRoute, this.controller.createEvent);
+        this.router.get(this.generalRoute, this.controller.get);
+        this.router.post(this.generalRoute, this.controller.create);
+        this.router.delete(this.generalRoute, this.controller.remove);
     }
 }
