@@ -8,16 +8,22 @@ export class EventController {
 
     constructor() {
         this.service = new EventService();
-        this.get = this.get.bind(this);
+        this.getByDay = this.getByDay.bind(this);
+        this.getById = this.getById.bind(this);
         this.create = this.create.bind(this);
         this.remove = this.remove.bind(this);
     }
 
-    public async get(req: Request, res: Response) {
+    public async getByDay(req: Request, res: Response) {
         const events = await this.service.get(
             req.query.dayOfWeek as TypeDayOfWeek,
         );
         res.status(StatusCodes.OK).json(events);
+    }
+
+    public async getById(req: Request, res: Response) {
+        const event = await this.service.getById(req.params.id);
+        res.status(StatusCodes.OK).json(event);
     }
 
     public async create(req: Request, res: Response) {
