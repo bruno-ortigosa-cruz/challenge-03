@@ -8,19 +8,27 @@ export class EventController {
 
     constructor() {
         this.service = new EventService();
-        this.getEvents = this.getEvents.bind(this);
-        this.createEvent = this.createEvent.bind(this);
+        this.get = this.get.bind(this);
+        this.create = this.create.bind(this);
+        this.remove = this.remove.bind(this);
     }
 
-    public async getEvents(req: Request, res: Response) {
-        const events = await this.service.getEvents(
+    public async get(req: Request, res: Response) {
+        const events = await this.service.get(
             req.query.dayOfWeek as TypeDayOfWeek,
         );
         res.status(StatusCodes.OK).json(events);
     }
 
-    public async createEvent(req: Request, res: Response) {
+    public async create(req: Request, res: Response) {
         const event = await this.service.createEvent(req.body);
         res.status(StatusCodes.CREATED).json(event);
+    }
+
+    public async remove(req: Request, res: Response) {
+        const events = await this.service.remove(
+            req.query.dayOfWeek as TypeDayOfWeek,
+        );
+        res.status(StatusCodes.OK).json(events);
     }
 }
