@@ -18,3 +18,7 @@ export interface IEvent extends Document {
 export interface IReturnEvent extends IEvent {
     _id: mongoose.ObjectId;
 }
+
+export interface IDeletedEvents {
+    deletedEvents: IReturnEvent[];
+}
