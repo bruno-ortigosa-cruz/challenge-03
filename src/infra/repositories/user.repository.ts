@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { IUser } from '../../helpers/interfaces/user.interface';
+import { IUser, IUserResponse } from '../../helpers/interfaces/user.interface';
 import { UserModel } from '../database/models/user.model';
 
 export class UserRepository {
@@ -9,7 +9,7 @@ export class UserRepository {
         this.model = UserModel;
     }
 
-    public async signUp(payload: IUser): Promise<IUser> {
+    public async signUp(payload: IUser): Promise<IUserResponse> {
         return await this.model.create(payload);
     }
 
