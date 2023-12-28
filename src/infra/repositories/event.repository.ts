@@ -1,5 +1,6 @@
 import { Model } from 'mongoose';
 import {
+    IDeleteResponse,
     IDeletedEvents,
     IEvent,
     IReturnEvent,
@@ -30,7 +31,7 @@ export class EventRepository {
         return await this.model.create(payload);
     }
 
-    public async remove(query: TypeDayOfWeek): Promise<IDeletedEvents> {
+    public async removeByDay(query: TypeDayOfWeek): Promise<IDeletedEvents> {
         const eventsToBeDeleted: IReturnEvent[] = await this.getQuery(query);
 
         await this.model.deleteMany({ dayOfWeek: query });
@@ -40,5 +41,10 @@ export class EventRepository {
         };
 
         return deleteResponse;
+    }
+
+    public async removeById(id: string): Promise<IDeleteResponse> {
+        const deleteResult = await this.model.deleteOne({ _id: id });
+        return deleteResult;
     }
 }
