@@ -7,9 +7,11 @@ import {
 import { EventRepository } from '../../infra/repositories/event.repository';
 
 export class EventService {
-    private eventRepository = new EventRepository();
+    private repository: EventRepository;
 
-    constructor() {}
+    constructor() {
+        this.repository = new EventRepository();
+    }
 
     public async get(req: Request): Promise<IReturnEvent[] | IReturnEvent> {
         const id: string = req.params.id;
@@ -17,7 +19,7 @@ export class EventService {
             .dayOfWeek as TypeDayOfWeek;
 
         if (id) {
-            const event = await this.eventRepository.getById(id);
+            const event = await this.repository.getById(id);
 
             if (!event) {
                 throw new Error('Não achou o evento não meu consagrado');
@@ -25,13 +27,13 @@ export class EventService {
             return event;
         }
 
-        if (!weekdayQuery) return await this.eventRepository.getAll();
+        if (!weekdayQuery) return await this.repository.getAll();
 
-        return await this.eventRepository.getQuery(weekdayQuery);
+        return await this.repository.getQuery(weekdayQuery);
     }
 
     public async createEvent(payload: IEvent) {
-        return await this.eventRepository.create(payload);
+        return await this.repository.create(payload);
     }
 
     public async remove(req: Request) {
@@ -40,7 +42,7 @@ export class EventService {
             .dayOfWeek as TypeDayOfWeek;
 
         if (id) {
-            const deletedEvent = await this.eventRepository.removeById(id);
+            const deletedEvent = await this.repository.removeById(id);
             if (!deletedEvent) {
                 throw new Error('Não achou o evento não meu consagrado');
             }
@@ -50,6 +52,6 @@ export class EventService {
 
         if (!weekdayQuery) throw new Error('sem query meu patrão');
 
-        return await this.eventRepository.removeByDay(weekdayQuery);
+        return await this.repository.removeByDay(weekdayQuery);
     }
 }
