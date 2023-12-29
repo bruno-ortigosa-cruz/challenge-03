@@ -20,3 +20,14 @@ export interface IUserResponse extends Omit<IUser, 'password'> {
 }
 
 export interface IUserNoPassword extends Omit<IUserResponse, 'password'> {}
+
+export interface IUserSignInRequest {
+    email: string;
+    password: string;
+}
+
+export interface IUserSignInResponse {
+    firstName: string;
+    lastName: string;
+    email: string;
+}
