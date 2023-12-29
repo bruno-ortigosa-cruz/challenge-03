@@ -31,3 +31,8 @@ export interface IUserSignInResponse {
     lastName: string;
     email: string;
 }
+
+export interface ISignInReturn {
+    user: IUserSignInResponse;
+    token: string;
+}
