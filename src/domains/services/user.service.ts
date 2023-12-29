@@ -1,8 +1,11 @@
+import jwt, { Secret } from 'jsonwebtoken';
 import { Request } from 'express';
 import { UserRepository } from '../../infra/repositories/user.repository';
 import {
+    ISignInReturn,
     IUser,
     IUserNoPassword,
+    IUserRequest,
     IUserSignInRequest,
     IUserSignInResponse,
 } from '../../helpers/interfaces/user.interface';
@@ -16,13 +19,19 @@ export class UserService {
     }
 
     public async signUp(req: Request): Promise<IUserNoPassword> {
-        const payload: IUser = req.body;
+        const payload: IUserRequest = req.body;
+
+        if (payload.password !== payload.confirmPassword) {
+            throw new Error('cofirmou a senha errada pitbull');
+        }
+
         const user = (await this.repository.signUp(payload)).toJSON();
         delete user.password;
+
         return user as IUserNoPassword;
     }
 
-    public async signIn(req: Request): Promise<IUserSignInResponse> {
+    public async signIn(req: Request): Promise<ISignInReturn> {
         const payload: IUserSignInRequest = req.body;
         const user: IUser | null = await this.repository.signIn(payload);
 
@@ -43,6 +52,18 @@ export class UserService {
             email: user.email,
         };
 
-        return responseUser;
+        const token: string = this.signToken(user._id, user.email, '7d');
+
+        return { user: responseUser, token };
+    }
+
+    private signToken(id: string, email: string, expiration: string): string {
+        return jwt.sign(
+            { _id: id, email: email },
+            process.env.SECRET_KEY as Secret,
+            {
+                expiresIn: expiration,
+            },
+        );
     }
 }
