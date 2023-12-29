@@ -24,6 +24,11 @@ export interface IDeletedEvents {
 }
 
 export interface IDeleteResponse {
-   acknowledged: boolean;
-   deletedCount: number;
+    acknowledged: boolean;
+    deletedCount: number;
+}
+
+export interface IEventQuery {
+    dayOfWeek?: TypeDayOfWeek;
+    description?: string | { $regex: RegExp };
 }

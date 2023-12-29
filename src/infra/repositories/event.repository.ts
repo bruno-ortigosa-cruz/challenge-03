@@ -3,8 +3,8 @@ import {
     IDeleteResponse,
     IDeletedEvents,
     IEvent,
+    IEventQuery,
     IReturnEvent,
-    TypeDayOfWeek,
 } from '../../helpers/interfaces/event.interface';
 import { EventModel } from '../database/models/event.model';
 
@@ -23,15 +23,15 @@ export class EventRepository {
         return await this.model.findById(id);
     }
 
-    public async getQuery(query: TypeDayOfWeek): Promise<IReturnEvent[]> {
-        return await this.model.find({ dayOfWeek: query });
+    public async getQuery(query: IEventQuery): Promise<IReturnEvent[]> {
+        return await this.model.find(query);
     }
 
     public async create(payload: IEvent): Promise<IReturnEvent> {
         return await this.model.create(payload);
     }
 
-    public async removeByDay(query: TypeDayOfWeek): Promise<IDeletedEvents> {
+    public async removeByDay(query: IEventQuery): Promise<IDeletedEvents> {
         const eventsToBeDeleted: IReturnEvent[] = await this.getQuery(query);
 
         await this.model.deleteMany({ dayOfWeek: query });
