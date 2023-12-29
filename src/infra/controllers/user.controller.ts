@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import { UserService } from '../../domains/services/user.service';
 import { StatusCodes } from 'http-status-codes';
 import {
+    ISignInReturn,
     IUserNoPassword,
-    IUserSignInResponse,
 } from '../../helpers/interfaces/user.interface';
 
 export class UserController {
@@ -21,7 +21,11 @@ export class UserController {
     }
 
     public async signIn(req: Request, res: Response) {
-        const user: IUserSignInResponse = await this.service.signIn(req);
-        res.status(StatusCodes.OK).json(user);
+        const response: ISignInReturn = await this.service.signIn(req);
+
+        console.log(response.token);
+
+        res.setHeader('Authorization', 'Bearer ' + response.token);
+        res.status(StatusCodes.OK).json(response.user);
     }
 }
