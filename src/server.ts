@@ -28,6 +28,7 @@ class Server {
         const env = cleanEnv(process.env, {
             MONGO_URI: str(),
             PORT: port({ default: 3000 }),
+            SECRET_KEY: str(),
         }) as IEnv;
 
         return env;
