@@ -15,7 +15,7 @@ export class EventService {
     }
 
     public async get(req: Request): Promise<IReturnEvent[] | IReturnEvent> {
-        const id: string = req.params.id;
+        const id = req.params.id as string;
         const dayOfWeekQuery = req.query.dayOfWeek as TypeDayOfWeek;
         const descriptionQuery = req.query.description as string;
 
