@@ -1,6 +1,10 @@
 import { Request, Response } from 'express';
 import { UserService } from '../../domains/services/user.service';
 import { StatusCodes } from 'http-status-codes';
+import {
+    IUserNoPassword,
+    IUserSignInResponse,
+} from '../../helpers/interfaces/user.interface';
 
 export class UserController {
     private service: UserService;
@@ -12,9 +16,12 @@ export class UserController {
     }
 
     public async signUp(req: Request, res: Response) {
-        const user = await this.service.signUp(req);
+        const user: IUserNoPassword = await this.service.signUp(req);
         res.status(StatusCodes.CREATED).json(user);
     }
 
-    public async signIn() {}
+    public async signIn(req: Request, res: Response) {
+        const user: IUserSignInResponse = await this.service.signIn(req);
+        res.status(StatusCodes.OK).json(user);
+    }
 }
