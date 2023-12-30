@@ -6,6 +6,7 @@ import {
     TypeDayOfWeek,
 } from '../../helpers/interfaces/event.interface';
 import { EventRepository } from '../../infra/repositories/event.repository';
+import { BadRequestError, NotFoundError } from '../../helpers/errors';
 
 export class EventService {
     private repository: EventRepository;
@@ -19,7 +20,7 @@ export class EventService {
         const dayOfWeekQuery = req.query.dayOfWeek as TypeDayOfWeek;
         const descriptionQuery = req.query.description as string;
 
-        if (id) this.getById(id);
+        if (id) return this.getById(id);
         if (!(dayOfWeekQuery || descriptionQuery)) {
             return await this.repository.getAll();
         }
@@ -32,7 +33,7 @@ export class EventService {
         const event = await this.repository.getById(id);
 
         if (!event) {
-            throw new Error('Não achou o evento não meu consagrado');
+            throw new NotFoundError('Event not found');
         }
         return event;
     }
@@ -62,14 +63,16 @@ export class EventService {
 
         if (id) {
             const deletedEvent = await this.repository.removeById(id);
-            if (!deletedEvent) {
-                throw new Error('Não achou o evento não meu consagrado');
+            if (deletedEvent.deletedCount === 0) {
+                throw new NotFoundError('Event not found');
             }
 
             return null;
         }
 
-        if (!dayOfWeekQuery) throw new Error('sem query meu patrão');
+        if (!dayOfWeekQuery) {
+            throw new BadRequestError('Day of the week not provided');
+        }
 
         return await this.repository.removeByDay(dayOfWeekQuery);
     }
