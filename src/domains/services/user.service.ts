@@ -10,6 +10,7 @@ import {
     IUserSignInResponse,
 } from '../../helpers/interfaces/user.interface';
 import { compare } from 'bcrypt';
+import { BadRequestError } from '../../helpers/errors';
 
 export class UserService {
     private repository: UserRepository;
@@ -21,10 +22,6 @@ export class UserService {
     public async signUp(req: Request): Promise<IUserNoPassword> {
         const payload: IUserRequest = req.body;
 
-        if (payload.password !== payload.confirmPassword) {
-            throw new Error('cofirmou a senha errada pitbull');
-        }
-
         const user = (await this.repository.signUp(payload)).toJSON();
         delete user.password;
 
@@ -35,7 +32,9 @@ export class UserService {
         const payload: IUserSignInRequest = req.body;
         const user: IUser | null = await this.repository.signIn(payload);
 
-        if (!user) throw new Error('tem esse user não, meu jovem');
+        if (!user) {
+            throw new BadRequestError('Email or password incorrect');
+        }
 
         const isPasswordCorrect = await compare(
             payload.password,
@@ -43,7 +42,7 @@ export class UserService {
         );
 
         if (!isPasswordCorrect) {
-            throw new Error('ta mexendo onde não deve pitbull');
+            throw new BadRequestError('Email or password incorrect');
         }
 
         const responseUser: IUserSignInResponse = {
