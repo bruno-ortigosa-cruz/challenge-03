@@ -1,5 +1,6 @@
 import { NextFunction, Request as ExpressRequest, Response } from 'express';
 import { Secret, verify } from 'jsonwebtoken';
+import { UnauthorizedError } from '../errors';
 
 type TypeJwtResponse = { _id: string; email: string };
 
@@ -8,18 +9,15 @@ interface Request extends ExpressRequest {
 }
 
 export class AuthMiddleware {
-    constructor() {}
-
     public exec(req: Request, _: Response, next: NextFunction) {
         const header = req.headers.authorization;
 
         if (!header) {
-            throw new Error('não tem token não meu querido');
+            throw new UnauthorizedError('User not logged in');
         }
-        console.log(header.startsWith('Bearer '));
 
         if (!header.startsWith('Bearer ')) {
-            throw new Error('esse token ta zoado hein');
+            throw new UnauthorizedError('User not logged in');
         }
 
         const token = header.replace('Bearer ', '');
