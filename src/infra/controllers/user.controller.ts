@@ -23,8 +23,6 @@ export class UserController {
     public async signIn(req: Request, res: Response) {
         const response: ISignInReturn = await this.service.signIn(req);
 
-        console.log(response.token);
-
         res.setHeader('Authorization', 'Bearer ' + response.token);
         res.status(StatusCodes.OK).json(response.user);
     }
