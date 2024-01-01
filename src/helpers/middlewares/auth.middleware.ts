@@ -1,15 +1,15 @@
-import { NextFunction, Request as ExpressRequest, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { Secret, verify } from 'jsonwebtoken';
 import { UnauthorizedError } from '../errors';
 
 type TypeJwtResponse = { _id: string; email: string };
 
-interface Request extends ExpressRequest {
+export interface RequestWithUser extends Request {
     user?: TypeJwtResponse;
 }
 
 export class AuthMiddleware {
-    public exec(req: Request, _: Response, next: NextFunction) {
+    public exec(req: RequestWithUser, _: Response, next: NextFunction) {
         const header = req.headers.authorization;
 
         if (!header) {
