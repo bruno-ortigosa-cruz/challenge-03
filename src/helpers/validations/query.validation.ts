@@ -2,7 +2,7 @@ import Joi from 'joi';
 import { dayOfWeekSchema } from '../utils/validation-schema.util';
 
 export const getEventQuery = Joi.object({
-    description: Joi.string().min(2).max(600),
+    description: Joi.string().min(1).max(600),
     dayOfWeek: dayOfWeekSchema(),
 });
 
