@@ -15,7 +15,8 @@ export class ErrorHandlerMiddleware {
         res: Response,
         next: NextFunction,
     ) {
-        if (!error) next();
+        if (!error) return next();
+
         if (error instanceof CustomError || error instanceof GenericError) {
             res.status(error.statusCode).json(error.getError());
         } else if (error instanceof ValidationError) {
