@@ -23,6 +23,7 @@ export class UserService {
         const payload: IUserRequest = req.body;
 
         const user = (await this.repository.signUp(payload)).toJSON();
+
         delete user.password;
 
         return user as IUserNoPassword;
