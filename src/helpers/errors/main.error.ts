@@ -16,4 +16,12 @@ export abstract class CustomError extends Error implements ICustomError {
         this.statusCode = statusCode;
         this.error = error;
     }
+
+    public getError() {
+        return {
+            statusCode: this.statusCode,
+            message: this.message,
+            error: this.error,
+        };
+    }
 }
