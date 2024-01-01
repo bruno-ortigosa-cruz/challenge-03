@@ -5,10 +5,7 @@ import {
     TypeDayOfWeek,
 } from '../../helpers/interfaces/event.interface';
 import { EventRepository } from '../../infra/repositories/event.repository';
-import {
-    NotFoundError,
-    UnauthorizedError,
-} from '../../helpers/errors';
+import { NotFoundError, UnauthorizedError } from '../../helpers/errors';
 import { RequestWithUser } from '../../helpers/middlewares/auth.middleware';
 
 export class EventService {
@@ -25,11 +22,21 @@ export class EventService {
 
         if (id) return this.getById(id);
         if (!(dayOfWeekQuery || descriptionQuery)) {
-            return await this.repository.getAll();
+            const events = await this.repository.getAll();
+            if (events.length === 0 || !events) {
+                throw new NotFoundError('No events found');
+            }
+            return events;
         }
 
         const query = await this.buildQuery(dayOfWeekQuery, descriptionQuery);
-        return await this.repository.getQuery(query);
+
+        const events = await this.repository.getQuery(query);
+
+        if (!events || events.length === 0)
+            throw new NotFoundError('No events found');
+
+        return events;
     }
 
     private async getById(id: string) {
