@@ -1,12 +1,15 @@
 import { Request } from 'express';
 import {
-    IEvent,
     IEventQuery,
     IReturnEvent,
     TypeDayOfWeek,
 } from '../../helpers/interfaces/event.interface';
 import { EventRepository } from '../../infra/repositories/event.repository';
-import { BadRequestError, NotFoundError } from '../../helpers/errors';
+import {
+    NotFoundError,
+    UnauthorizedError,
+} from '../../helpers/errors';
+import { RequestWithUser } from '../../helpers/middlewares/auth.middleware';
 
 export class EventService {
     private repository: EventRepository;
@@ -38,6 +41,33 @@ export class EventService {
         return event;
     }
 
+    public async createEvent(req: RequestWithUser) {
+        if (!req.user) throw new UnauthorizedError('User not logged in');
+        const payload = { ...req.body, userId: req.user._id };
+        return await this.repository.create(payload);
+    }
+
+    public async remove(req: Request) {
+        const id = req.params.id;
+        const dayOfWeekQuery: TypeDayOfWeek = req.query
+            .dayOfWeek as TypeDayOfWeek;
+
+        if (id) {
+            const deletedEvent = await this.repository.removeById(id);
+            if (deletedEvent.deletedCount === 0) {
+                throw new NotFoundError('Event not found');
+            }
+
+            return null;
+        }
+
+        const events = await this.repository.removeByDay(dayOfWeekQuery);
+        if (events.deletedEvents.length === 0)
+            throw new NotFoundError('No events found');
+
+        return events;
+    }
+
     private async buildQuery(
         dayOfWeekQuery: TypeDayOfWeek,
         descriptionQuery: string,
@@ -51,29 +81,5 @@ export class EventService {
         }
 
         return query;
-    }
-
-    public async createEvent(payload: IEvent) {
-        return await this.repository.create(payload);
-    }
-
-    public async remove(req: Request) {
-        const id = req.params.id;
-        const dayOfWeekQuery: IEventQuery = req.query.dayOfWeek as IEventQuery;
-
-        if (id) {
-            const deletedEvent = await this.repository.removeById(id);
-            if (deletedEvent.deletedCount === 0) {
-                throw new NotFoundError('Event not found');
-            }
-
-            return null;
-        }
-
-        if (!dayOfWeekQuery) {
-            throw new BadRequestError('Day of the week not provided');
-        }
-
-        return await this.repository.removeByDay(dayOfWeekQuery);
     }
 }
