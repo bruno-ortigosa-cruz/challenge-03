@@ -21,3 +21,16 @@ export const dynamicStringSchema = (
                     : `The ${field} provided, '{#value}', contains not supported characters.`,
         });
 };
+
+export const dayOfWeekSchema = (): StringSchema => {
+    return Joi.string()
+        .valid(
+            'sunday',
+            'monday',
+            'tuesday',
+            'wednesday',
+            'thursday',
+            'friday',
+            'saturday',
+        )
+};
