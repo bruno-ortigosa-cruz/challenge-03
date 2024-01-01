@@ -34,7 +34,7 @@ export class GenericError {
                 'Bad Request',
             );
         } else {
-            console.log(`Error: {\n${this.paramError}\n}`);
+            console.log(`Unhandled Error: {\n${this.paramError}\n}`);
             return;
         }
     }
