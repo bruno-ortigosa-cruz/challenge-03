@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { EventService } from '../../domains/services/event.service';
 import { StatusCodes } from 'http-status-codes';
+import { RequestWithUser } from '../../helpers/middlewares/auth.middleware';
 
 export class EventController {
     private service: EventService;
@@ -17,15 +18,15 @@ export class EventController {
         res.status(StatusCodes.OK).json(events);
     }
 
-    public async create(req: Request, res: Response) {
-        const event = await this.service.createEvent(req.body);
+    public async create(req: RequestWithUser, res: Response) {
+        const event = await this.service.createEvent(req);
         res.status(StatusCodes.CREATED).json(event);
     }
 
     public async remove(req: Request, res: Response) {
         const events = await this.service.remove(req);
 
-        if (events) res.send(StatusCodes.OK).json(events);
-        res.sendStatus(StatusCodes.NO_CONTENT);
+        if (!events) res.sendStatus(StatusCodes.NO_CONTENT);
+        else res.status(StatusCodes.OK).json(events);
     }
 }
