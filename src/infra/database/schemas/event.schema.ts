@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
-import { IEvent } from '../../../helpers/interfaces/event.interface';
+import { IEventWithId } from '../../../helpers/interfaces/event.interface';
 
-export const EventSchema = new Schema<IEvent>(
+export const EventSchema = new Schema<IEventWithId>(
     {
         description: {
             type: String,
