@@ -1,33 +1,31 @@
 import Joi from 'joi';
 import JoiDate from '@joi/date';
-import { signUpStringSchema } from '../utils/validation-schema.util';
+import { dynamicStringSchema } from '../utils/validation-schema.util';
 
 const DateJoi = Joi.extend(JoiDate);
 
 const generalPattern = /^[\p{L} '’.-]+$/u;
+const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W).*$/;
 
 export const userSignUpSchema = Joi.object({
-    firstName: signUpStringSchema('First name', 2, 50, generalPattern),
-    lastName: signUpStringSchema('Last name', 2, 50, generalPattern),
-    birthDate: DateJoi.date().format(['YYYY-MM-DD']).required(),
-    city: signUpStringSchema('City', 2, 75, generalPattern),
-    country: signUpStringSchema('Country', 2, 75, generalPattern),
+    firstName: dynamicStringSchema('First name', 2, 50, generalPattern),
+    lastName: dynamicStringSchema('Last name', 2, 50, generalPattern),
+    birthDate: DateJoi.date().format('YYYY-MM-DD').required().messages({
+        'date.format': `Birth date must be in the 'YYYY-MM-DD' format`,
+    }),
+    city: dynamicStringSchema('City', 2, 75, generalPattern),
+    country: dynamicStringSchema('Country', 2, 75, generalPattern),
     email: Joi.string().trim().email().required(),
-    password: Joi.string()
-        .trim()
-        .pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W).*$/)
-        .min(8)
-        .max(50)
+    password: dynamicStringSchema('Password', 8, 50, passwordPattern),
+    confirmPassword: Joi.string()
+        .valid(Joi.ref('password'))
+        .required()
         .messages({
-            'string.min': `Password must be at least 8 characters long`,
-            'string.max': `Password must not exceed 50 characters`,
-            'string.pattern.base': `Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character`,
-        })
-        .required(),
-    confirmPassword: Joi.string().valid(Joi.ref('password')).required(),
+            'any.only': `ConfirmPassword must match Password`,
+        }),
 });
 
 export const userSignInSchema = Joi.object({
     email: Joi.string().trim().email().required(),
-    password: Joi.string().trim().required(),
+    password: dynamicStringSchema('Password', 8, 50, passwordPattern),
 });

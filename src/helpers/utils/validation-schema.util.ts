@@ -1,6 +1,6 @@
 import Joi, { StringSchema } from 'joi';
 
-export const signUpStringSchema = (
+export const dynamicStringSchema = (
     field: string,
     min: number,
     max: number,
@@ -11,10 +11,13 @@ export const signUpStringSchema = (
         .pattern(pattern)
         .min(min)
         .max(max)
+        .required()
         .messages({
             'string.min': `${field} must be at least ${min} characters long`,
             'string.max': `${field} must not exceed ${max} characters`,
-            'string.pattern.base': `The ${field} provided, '{#value}', contains not supported characters.`,
-        })
-        .required();
+            'string.pattern.base':
+                field === 'Password'
+                    ? `Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character`
+                    : `The ${field} provided, '{#value}', contains not supported characters.`,
+        });
 };
