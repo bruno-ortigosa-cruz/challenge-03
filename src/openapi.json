@@ -1,0 +1,836 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Challenge 3 - Node & AWS",
+        "description": "CRUD of Users and Events",
+        "version": "1.0.0",
+        "license": {
+            "name": "MIT License",
+            "url": "https://opensource.org/license/mit/"
+        }
+    },
+    "servers": [
+        {
+            "url": "https://challenge-03.onrender.com/api/{version}",
+            "variables": {
+                "version": {
+                    "default": "v1",
+                    "enum": [
+                        "v1"
+                    ]
+                }
+            }
+        },
+        {
+            "url": "http://localhost:{port}/api/{version}",
+            "variables": {
+                "port": {
+                    "default": "3000"
+                },
+                "version": {
+                    "default": "v1",
+                    "enum": [
+                        "v1"
+                    ]
+                }
+            }
+        }
+    ],
+    "tags": [
+        {
+            "name": "User",
+            "description": "User routes"
+        },
+        {
+            "name": "Event",
+            "description": "Event routes"
+        }
+    ],
+    "paths": {
+        "/users/sign-up": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Add a new user",
+                "description": "Route to create users",
+                "operationId": "signUpUser",
+                "requestBody": {
+                    "description": "User that needs to be added",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserSignUp"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserSignUpResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InternalServerError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/sign-in": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Login of an existing user",
+                "description": "",
+                "operationId": "signInUser",
+                "requestBody": {
+                    "description": "User that needs to be added",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserSignIn"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User logged in successfully",
+                        "headers": {
+                            "Authorization": {
+                                "description": "Authorization header",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InternalServerError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/events": {
+            "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Create an event",
+                "description": "Create an event",
+                "operationId": "createEvent",
+                "requestBody": {
+                    "description": "User that needs to be added",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EventInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Event"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedError"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InternalServerError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/dayOfWeek"
+                    },
+                    {
+                        "$ref": "#/components/parameters/description"
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Get events",
+                "description": "Returns all events, corresponding to filters",
+                "operationId": "getEvents",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Event"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data supplied",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedError"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Event not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundError"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InternalServerError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/dayOfWeek"
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Deletes events from a specific Day of Week",
+                "description": "",
+                "operationId": "deleteDailyEvents",
+                "responses": {
+                    "200": {
+                        "description": "List of deleteDailyEvents",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "deletedEvents": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Event"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data supplied",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedError"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Event not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundError"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InternalServerError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/events/{id}": {
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "id",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Get an event from a specific id",
+                "description": "Returns an event from a specific id",
+                "operationId": "getEventById",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Event"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedError"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Content not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundError"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InternalServerError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Deletes an event from a specific id",
+                "description": "",
+                "operationId": "deleteEventById",
+                "responses": {
+                    "204": {
+                        "description": "Event deleted"
+                    },
+                    "400": {
+                        "description": "Invalid ID supplied",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BadRequestError"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UnauthorizedError"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Event not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NotFoundError"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InternalServerError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "parameters": {
+            "dayOfWeek": {
+                "in": "query",
+                "name": "dayOfWeek",
+                "schema": {
+                    "type": "string",
+                    "enum": [
+                        "sunday",
+                        "monday",
+                        "tuesday",
+                        "wednesday",
+                        "thursday",
+                        "friday",
+                        "saturday"
+                    ]
+                }
+            },
+            "description": {
+                "in": "query",
+                "name": "description",
+                "schema": {
+                    "type": "string"
+                }
+            }
+        },
+        "schemas": {
+            "BadRequestError": {
+                "type": "object",
+                "properties": {
+                    "statusCode": {
+                        "type": "number",
+                        "example": 400
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Invalid Id"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Bad Request"
+                    }
+                }
+            },
+            "NotFoundError": {
+                "type": "object",
+                "properties": {
+                    "statusCode": {
+                        "type": "number",
+                        "example": 404
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Event Not found"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Not Found"
+                    }
+                }
+            },
+            "UnauthorizedError": {
+                "type": "object",
+                "properties": {
+                    "statusCode": {
+                        "type": "number",
+                        "example": 401
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "User not logged in"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Unauthorized"
+                    }
+                }
+            },
+            "InternalServerError": {
+                "type": "object",
+                "properties": {
+                    "statusCode": {
+                        "type": "number",
+                        "example": 500
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Something went wrong"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Internal Server Error"
+                    }
+                }
+            },
+            "ValidationError": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "example": "Validation Error"
+                    },
+                    "errors": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "resource": {
+                                    "type": "string",
+                                    "example": "email"
+                                },
+                                "message": {
+                                    "type": "string",
+                                    "example": "'email' must be a valid email"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "UserSignUp": {
+                "type": "object",
+                "required": [
+                    "firstName",
+                    "lastName",
+                    "birthDate",
+                    "city",
+                    "country",
+                    "email",
+                    "password",
+                    "confirmPassword"
+                ],
+                "properties": {
+                    "firstName": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 50,
+                        "example": "Jorge"
+                    },
+                    "lastName": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 50,
+                        "example": "Sánchez"
+                    },
+                    "birthDate": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "The date of birth in the format YYYY-MM-DD",
+                        "example": "1985-04-13"
+                    },
+                    "city": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 75,
+                        "example": "Whanganui"
+                    },
+                    "country": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 75,
+                        "example": "New Zealand"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "jorge.sanchez@yandex.ru"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "minLength": 8,
+                        "maxLength": 50,
+                        "description": "Must have at least 1 Upper and lower case, 1 digit and 1 special character",
+                        "example": "Password123#"
+                    },
+                    "confirmPassword": {
+                        "type": "string",
+                        "format": "password",
+                        "description": "Must match 'password'",
+                        "example": "Password123#"
+                    }
+                }
+            },
+            "UserSignUpResponse": {
+                "type": "object",
+                "properties": {
+                    "firstName": {
+                        "type": "string",
+                        "example": "Jorge"
+                    },
+                    "lastName": {
+                        "type": "string",
+                        "example": "Sánchez"
+                    },
+                    "birthDate": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "1985-04-13"
+                    },
+                    "city": {
+                        "type": "string",
+                        "example": "Whanganui"
+                    },
+                    "country": {
+                        "type": "string",
+                        "example": "New Zealand"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "jorge.sanchez@yandex.ru"
+                    },
+                    "_id": {
+                        "type": "string",
+                        "example": "658e13905028d668c2f810db"
+                    }
+                }
+            },
+            "UserSignIn": {
+                "type": "object",
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "jorge.sanchez@yandex.ru"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "minLength": 8,
+                        "maxLength": 50,
+                        "description": "Must have at least 1 Upper and lower case, 1 digit and 1 special character",
+                        "example": "Password123#"
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "firstName": {
+                        "type": "string",
+                        "minLength": 5,
+                        "example": "Jorge"
+                    },
+                    "lastName": {
+                        "type": "string",
+                        "minLength": 5,
+                        "example": "Sánchez"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "jorge.sanchez@yandex.ru"
+                    }
+                }
+            },
+            "Identification": {
+                "type": "object",
+                "required": [
+                    "_id"
+                ],
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "example": "658e13905028d668c2f810db"
+                    }
+                }
+            },
+            "EventInput": {
+                "type": "object",
+                "required": [
+                    "dayOfWeek"
+                ],
+                "properties": {
+                    "description": {
+                        "type": "string",
+                        "minLength": 5,
+                        "example": "Can you jump higher than a Kangaroo?"
+                    },
+                    "dayOfWeek": {
+                        "type": "string",
+                        "enum": [
+                            "sunday",
+                            "monday",
+                            "tuesday",
+                            "wednesday",
+                            "thursday",
+                            "friday",
+                            "saturday"
+                        ],
+                        "example": "saturday"
+                    }
+                }
+            },
+            "Event": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Identification"
+                    },
+                    {
+                        "$ref": "#/components/schemas/EventInput"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "userId": {
+                                "type": "string",
+                                "example": "658e13905028d668c2f810db"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
