@@ -2,7 +2,7 @@ import 'express-async-errors';
 import path from 'path';
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
-import swaggerConfig from './openapi.json';
+import swaggerConfig from './swagger.json';
 import { EventRoutes } from './infra/routes/event.route';
 import { UserRoutes } from './infra/routes/user.route';
 import { FallbackMiddleware } from './helpers/middlewares/fallback.middleware';
