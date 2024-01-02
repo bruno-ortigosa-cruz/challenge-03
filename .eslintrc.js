@@ -12,7 +12,11 @@ module.exports = {
         'prettier',
     ],
     rules: {
-        indent: ['error', 4, { ignoredNodes: ['PropertyDefinition'] }],
+        indent: [
+            'error',
+            4,
+            { ignoredNodes: ['PropertyDefinition', 'SwitchCase'] },
+        ],
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/no-unused-vars': [
             'error',
