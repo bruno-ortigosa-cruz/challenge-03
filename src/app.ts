@@ -1,5 +1,7 @@
 import 'express-async-errors';
 import express from 'express';
+import swaggerUi from 'swagger-ui-express';
+import swaggerConfig from './openapi.json'
 import { EventRoutes } from './infra/routes/event.route';
 import { UserRoutes } from './infra/routes/user.route';
 import { FallbackMiddleware } from './helpers/middlewares/fallback.middleware';
@@ -25,7 +27,16 @@ export class App implements IApp {
         this.errorHandler = new ErrorHandlerMiddleware();
         this.fallback = new FallbackMiddleware();
 
+        this.configureApp();
+    }
+
+    private configureApp() {
         this.app.use(express.json());
+        this.app.use(
+            '/api-docs',
+            swaggerUi.serve,
+            swaggerUi.setup(swaggerConfig),
+        );
 
         this.app.use(this.prefix, this.routes.user.router);
         this.app.use(
