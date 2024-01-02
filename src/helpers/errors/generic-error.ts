@@ -1,12 +1,14 @@
 import { TypeApiErrors } from '../interfaces/error.interface';
 import { StatusCodes } from 'http-status-codes';
 import { MongoServerError } from 'mongodb';
+import pino, { Logger } from 'pino';
 
 export class GenericError {
     private paramError: unknown;
     public message: string;
     public error: TypeApiErrors;
     public statusCode: StatusCodes;
+    private logger: Logger = pino();
 
     constructor(error: unknown) {
         this.paramError = error;
@@ -18,10 +20,10 @@ export class GenericError {
 
     private checkError() {
         if (!(this.paramError instanceof Error)) {
-            console.log(`Unhandled Error: {\n${this.paramError}\n}`);
+            this.logger.error(this.paramError);
             return;
         }
-
+        
         const errorType: string = this.paramError.constructor.name;
         const mongoError = this.paramError as MongoServerError;
 

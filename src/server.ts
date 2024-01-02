@@ -3,12 +3,21 @@ import { IEnv } from './helpers/interfaces/env.interface';
 import { cleanEnv, port, str } from 'envalid';
 import { App } from './app';
 import { Database } from './infra/database/database.db';
+import pino, { Logger } from 'pino';
 
 class Server {
     private prefix: string = '/api/v1';
     private env: IEnv;
     private express: App;
     private database: Database;
+    private logger: Logger = pino({
+        transport: {
+            target: 'pino-pretty',
+            options: {
+                colorize: true,
+            },
+        },
+    });
 
     constructor() {
         this.env = this.validateEnv();
@@ -19,7 +28,9 @@ class Server {
     public start() {
         this.express.app.listen(this.env.PORT, async () => {
             await this.database.connect().then(() => {
-                console.log(`Server is listening on port ${this.env.PORT}...`);
+                this.logger.info(
+                    `Server is listening on port ${this.env.PORT}...`,
+                );
             });
         });
     }
