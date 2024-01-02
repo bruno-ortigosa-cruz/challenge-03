@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
 import { TypeApiErrors } from '../interfaces/error.interface';
 import { StatusCodes } from 'http-status-codes';
+import { MongoServerError } from 'mongodb';
 
 export class GenericError {
     private paramError: unknown;
@@ -17,36 +17,68 @@ export class GenericError {
     }
 
     private checkError() {
-        if (this.paramError instanceof mongoose.mongo.MongoServerError) {
-            if (this.paramError.code === 11000) {
-                this.setProperties(
-                    StatusCodes.CONFLICT,
-                    `'${Object.keys(
-                        this.paramError.keyValue,
-                    )}' cannot be duplicated`,
-                    'Conflict',
-                );
-            }
-        } else if (this.paramError instanceof mongoose.Error.CastError) {
-            this.setProperties(
-                StatusCodes.BAD_REQUEST,
-                `'${this.paramError.value}' is not a valid id`,
-                'Bad Request',
-            );
-        } else {
+        if (!(this.paramError instanceof Error)) {
             console.log(`Unhandled Error: {\n${this.paramError}\n}`);
             return;
         }
+
+        const errorType: string = this.paramError.constructor.name;
+        const mongoError = this.paramError as MongoServerError;
+
+        switch (errorType) {
+            case 'JsonWebTokenError':
+                this.setProperties('Unauthorized', 'User not logged in');
+                break;
+            case 'MongoServerError':
+                if (mongoError.code === 11000) {
+                    this.setProperties(
+                        'Conflict',
+                        `'${Object.keys(
+                            mongoError.keyValue,
+                        )}' cannot be duplicated`,
+                    );
+                } else {
+                    this.setProperties(
+                        'Internal Server Error',
+                        `${mongoError.message}`,
+                    );
+                }
+                break;
+            case 'CastError':
+                this.setProperties(
+                    'Bad Request',
+                    `'${mongoError.value}' is not a valid id`,
+                );
+                break;
+            default:
+                this.setProperties(
+                    'Internal Server Error',
+                    `${this.paramError.message}`,
+                );
+        }
     }
 
-    private setProperties(
-        statusCode: StatusCodes,
-        message: string,
-        error: TypeApiErrors,
-    ) {
-        this.statusCode = statusCode;
-        this.message = message;
+    private setProperties(error: TypeApiErrors, message: string) {
         this.error = error;
+        this.message = message;
+
+        switch (error) {
+            case 'Unauthorized':
+                this.statusCode = StatusCodes.UNAUTHORIZED;
+                break;
+            case 'Bad Request':
+                this.statusCode = StatusCodes.BAD_REQUEST;
+                break;
+            case 'Conflict':
+                this.statusCode = StatusCodes.CONFLICT;
+                break;
+            case 'Not Found':
+                this.statusCode = StatusCodes.NOT_FOUND;
+                break;
+            case 'Internal Server Error':
+                this.statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
+                break;
+        }
     }
 
     public getError() {
