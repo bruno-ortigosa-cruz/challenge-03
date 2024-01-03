@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { CustomError } from '../errors/custom.error';
 import { StatusCodes } from 'http-status-codes';
 import { ValidationError } from '../errors/validation.error';
-import { GenericError } from '../errors/generic-error';
+import { GenericError } from '../errors/generic.error';
 
 export class ErrorHandlerMiddleware {
     constructor() {
