@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node dist/server.js | pino-pretty",
     "build": "tsc --project tsconfig.build.json",
-    "dev": "tsc-watch --onSuccess \"node ./dist/server.js | pino-pretty\"",
+    "dev": "tsc-watch --project tsconfig.build.json --onSuccess \"node ./dist/server.js | pino-pretty\"",
     "lint": "eslint src --fix",
     "test": "jest",
     "test:verbose": "jest --verbose",
