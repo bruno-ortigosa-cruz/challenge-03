@@ -22,6 +22,7 @@ module.exports = {
             'error',
             { argsIgnorePattern: '^_' },
         ],
+        '@typescript-eslint/no-var-requires': 'off',
     },
     ignorePatterns: ['**/*.js'],
 };
