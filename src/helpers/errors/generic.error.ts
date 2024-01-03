@@ -71,9 +71,6 @@ export class GenericError {
             case 'Bad Request':
                 this.statusCode = StatusCodes.BAD_REQUEST;
                 break;
-            case 'Not Found':
-                this.statusCode = StatusCodes.NOT_FOUND;
-                break;
             case 'Internal Server Error':
                 this.statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
                 break;
