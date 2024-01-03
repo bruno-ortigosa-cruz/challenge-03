@@ -23,7 +23,7 @@ export class GenericError {
             this.logger.error(this.paramError);
             return;
         }
-        
+
         const errorType: string = this.paramError.constructor.name;
         const mongoError = this.paramError as MongoServerError;
 
@@ -34,7 +34,7 @@ export class GenericError {
             case 'MongoServerError':
                 if (mongoError.code === 11000) {
                     this.setProperties(
-                        'Conflict',
+                        'Bad Request',
                         `'${Object.keys(
                             mongoError.keyValue,
                         )}' cannot be duplicated`,
@@ -70,9 +70,6 @@ export class GenericError {
                 break;
             case 'Bad Request':
                 this.statusCode = StatusCodes.BAD_REQUEST;
-                break;
-            case 'Conflict':
-                this.statusCode = StatusCodes.CONFLICT;
                 break;
             case 'Not Found':
                 this.statusCode = StatusCodes.NOT_FOUND;

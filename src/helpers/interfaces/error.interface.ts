@@ -4,7 +4,6 @@ export type TypeApiErrors =
     | 'Not Found'
     | 'Unauthorized'
     | 'Bad Request'
-    | 'Conflict'
     | 'Internal Server Error';
 
 export interface ICustomError {
