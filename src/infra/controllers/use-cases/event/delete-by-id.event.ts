@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { TypeDayOfWeek } from '../../../../helpers/interfaces/event.interface';
 import { DeleteEventByIdUseCaseSer } from '../../../../domains/use-cases/event/delete-by-id.event';
 
 export class DeleteEventByIdUseCaseCon {
@@ -12,8 +11,9 @@ export class DeleteEventByIdUseCaseCon {
     }
 
     public async exec(req: Request, res: Response) {
-        const dayOfWeek = req.query.dayOfWeek as TypeDayOfWeek;
-        await this.service.exec(dayOfWeek);
+        const id = req.params.id;
+
+        await this.service.exec(id);
 
         res.sendStatus(StatusCodes.NO_CONTENT);
     }
