@@ -8,7 +8,7 @@ import {
     TypeDayOfWeek,
 } from '../../../../helpers/interfaces/event.interface';
 
-export class DeleteEventsByDayUseCaseRep {
+export class DeleteManyEventsUseCaseRep {
     private model: Model<IEventWithId>;
 
     constructor() {
