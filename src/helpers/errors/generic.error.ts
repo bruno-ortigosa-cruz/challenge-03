@@ -8,7 +8,14 @@ export class GenericError {
     public message: string;
     public error: TypeApiErrors;
     public statusCode: StatusCodes;
-    private logger: Logger = pino();
+    private logger: Logger = pino({
+        transport: {
+            target: 'pino-pretty',
+            options: {
+                colorize: true,
+            },
+        },
+    });
 
     constructor(error: unknown) {
         this.paramError = error;
