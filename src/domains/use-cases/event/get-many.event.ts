@@ -6,7 +6,7 @@ import {
 import { GetAllEventsUseCaseRep } from '../../../infra/repositories/use-cases/event/get-all.event';
 import { GetEventsByDayUseCaseRep } from '../../../infra/repositories/use-cases/event/get-by-day.event';
 
-export class GetEventsUseCaseSer {
+export class GetManyEventsUseCaseSer {
     private getByDayRepository: GetEventsByDayUseCaseRep;
     private getAllRepository: GetAllEventsUseCaseRep;
 
