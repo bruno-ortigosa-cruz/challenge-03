@@ -1,12 +1,12 @@
 import { NotFoundError } from '../../../helpers/errors';
 import { TypeDayOfWeek } from '../../../helpers/interfaces/event.interface';
-import { DeleteEventsByDayUseCaseRep } from '../../../infra/repositories/use-cases/event/delete-many.event';
+import { DeleteManyEventsUseCaseRep } from '../../../infra/repositories/use-cases/event/delete-many.event';
 
 export class DeleteManyEventsUseCaseSer {
-    private repository: DeleteEventsByDayUseCaseRep;
+    private repository: DeleteManyEventsUseCaseRep;
 
     constructor() {
-        this.repository = new DeleteEventsByDayUseCaseRep();
+        this.repository = new DeleteManyEventsUseCaseRep();
     }
 
     public async exec(dayOfWeek: TypeDayOfWeek) {
