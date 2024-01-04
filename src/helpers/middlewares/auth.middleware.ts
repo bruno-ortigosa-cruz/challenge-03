@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Secret, verify } from 'jsonwebtoken';
 import { UnauthorizedError } from '../errors';
 
-type TypeJwtResponse = { _id: string; email: string };
+export type TypeJwtResponse = { _id: string; email: string };
 
 export interface RequestWithUser extends Request {
     user?: TypeJwtResponse;
