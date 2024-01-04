@@ -18,7 +18,7 @@ export const dynamicStringSchema = (
             'string.pattern.base':
                 field === 'Password'
                     ? `Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character`
-                    : `The ${field} provided, '{#value}', contains not supported characters.`,
+                    : `${field} provided, '{#value}', contains not supported characters.`,
         });
 };
 
