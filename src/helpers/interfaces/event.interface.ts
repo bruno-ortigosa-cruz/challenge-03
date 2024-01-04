@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose';
+import { Document } from 'mongoose';
 
 export type TypeDayOfWeek =
     | 'sunday'
@@ -15,11 +15,11 @@ export interface IEvent extends Document {
 }
 
 export interface IEventWithId extends IEvent {
-    userId: mongoose.ObjectId;
+    userId: string;
 }
 
 export interface IReturnEvent extends IEvent {
-    _id: mongoose.ObjectId;
+    _id: string;
 }
 
 export interface IDeletedEvents {

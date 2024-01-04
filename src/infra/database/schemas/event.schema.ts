@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import { Schema } from 'mongoose';
 import { IEventWithId } from '../../../helpers/interfaces/event.interface';
 
 export const EventSchema = new Schema<IEventWithId>(
@@ -10,7 +10,7 @@ export const EventSchema = new Schema<IEventWithId>(
             type: String,
         },
         userId: {
-            type: mongoose.Types.ObjectId,
+            type: String,
         },
     },
     { versionKey: false },

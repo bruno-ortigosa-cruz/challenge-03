@@ -1,37 +1,23 @@
-import jwt, { Secret } from 'jsonwebtoken';
-import { Request } from 'express';
-import { UserRepository } from '../../infra/repositories/user.repository';
 import {
     ISignInReturn,
     IUser,
-    IUserNoPassword,
-    IUserRequest,
     IUserSignInRequest,
     IUserSignInResponse,
-} from '../../helpers/interfaces/user.interface';
+} from '../../../helpers/interfaces/user.interface';
+import { BadRequestError } from '../../../helpers/errors';
 import { compare } from 'bcrypt';
-import { BadRequestError } from '../../helpers/errors';
+import jwt, { Secret } from 'jsonwebtoken';
+import { SignInUseCaseRep } from '../../../infra/repositories/use-cases/user/sign-in.user';
 
-export class UserService {
-    private repository: UserRepository;
+export class SignInUseCaseSer {
+    private repository: SignInUseCaseRep;
 
     constructor() {
-        this.repository = new UserRepository();
+        this.repository = new SignInUseCaseRep();
     }
 
-    public async signUp(req: Request): Promise<IUserNoPassword> {
-        const payload: IUserRequest = req.body;
-
-        const user = (await this.repository.signUp(payload)).toJSON();
-
-        delete user.password;
-
-        return user as IUserNoPassword;
-    }
-
-    public async signIn(req: Request): Promise<ISignInReturn> {
-        const payload: IUserSignInRequest = req.body;
-        const user: IUser | null = await this.repository.signIn(payload);
+    public async exec(payload: IUserSignInRequest): Promise<ISignInReturn> {
+        const user: IUser | null = await this.repository.exec(payload);
 
         if (!user) {
             throw new BadRequestError('Email or password incorrect');
