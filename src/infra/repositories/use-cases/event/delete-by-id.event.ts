@@ -12,7 +12,7 @@ export class DeleteEventByIdUseCaseRep {
         this.model = EventModel;
     }
 
-    public async removeById(id: string): Promise<IDeleteResponse> {
+    public async exec(id: string): Promise<IDeleteResponse> {
         const deleteResult = await this.model.deleteOne({ _id: id });
         return deleteResult;
     }

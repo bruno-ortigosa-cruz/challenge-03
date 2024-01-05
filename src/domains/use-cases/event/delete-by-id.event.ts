@@ -9,7 +9,7 @@ export class DeleteEventByIdUseCaseSer {
     }
 
     public async exec(id: string) {
-        const event = await this.repository.removeById(id);
+        const event = await this.repository.exec(id);
 
         if (event.deletedCount === 0)
             throw new NotFoundError('Event not found');
