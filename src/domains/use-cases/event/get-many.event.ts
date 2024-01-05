@@ -1,6 +1,7 @@
 import { NotFoundError } from '../../../helpers/errors';
 import {
     IEventQuery,
+    IReturnEventWithId,
     TypeDayOfWeek,
 } from '../../../helpers/interfaces/event.interface';
 import { GetAllEventsUseCaseRep } from '../../../infra/repositories/use-cases/event/get-all.event';
@@ -15,8 +16,11 @@ export class GetManyEventsUseCaseSer {
         this.getAllRepository = new GetAllEventsUseCaseRep();
     }
 
-    public async exec(dayOfWeek: TypeDayOfWeek, description: string) {
-        if (!(dayOfWeek || description)) {
+    public async exec(
+        dayOfWeek: TypeDayOfWeek | undefined,
+        description: string | undefined,
+    ): Promise<IReturnEventWithId[]> {
+        if (!dayOfWeek && !description) {
             return this.getAll();
         }
 
@@ -29,7 +33,7 @@ export class GetManyEventsUseCaseSer {
         return events;
     }
 
-    private async getAll() {
+    private async getAll(): Promise<IReturnEventWithId[]> {
         const events = await this.getAllRepository.exec();
         if (events.length === 0 || !events) {
             throw new NotFoundError('No events found');
@@ -37,7 +41,10 @@ export class GetManyEventsUseCaseSer {
         return events;
     }
 
-    private buildQuery(dayOfWeek: TypeDayOfWeek, description: string) {
+    private buildQuery(
+        dayOfWeek: TypeDayOfWeek | undefined,
+        description: string | undefined,
+    ) {
         const query: IEventQuery = {};
 
         if (dayOfWeek) query['dayOfWeek'] = dayOfWeek;
