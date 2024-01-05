@@ -3,7 +3,7 @@ import { EventModel } from '../../../database/models/event.model';
 import {
     IEventQuery,
     IEventWithId,
-    IReturnEvent,
+    IReturnEventWithId,
 } from '../../../../helpers/interfaces/event.interface';
 
 export class GetEventsByDayUseCaseRep {
@@ -13,7 +13,7 @@ export class GetEventsByDayUseCaseRep {
         this.model = EventModel;
     }
 
-    public async exec(query: IEventQuery): Promise<IReturnEvent[]> {
+    public async exec(query: IEventQuery): Promise<IReturnEventWithId[]> {
         return await this.model.find(query);
     }
 }

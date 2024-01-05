@@ -18,12 +18,12 @@ export interface IEventWithId extends IEvent {
     userId: string;
 }
 
-export interface IReturnEvent extends IEvent {
+export interface IReturnEventWithId extends IEventWithId {
     _id: string;
 }
 
 export interface IDeletedEvents {
-    deletedEvents: IReturnEvent[];
+    deletedEvents: IReturnEventWithId[];
 }
 
 export interface IDeleteResponse {

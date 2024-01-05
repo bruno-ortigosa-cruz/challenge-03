@@ -2,7 +2,7 @@ import { Model } from 'mongoose';
 import { EventModel } from '../../../database/models/event.model';
 import {
     IEventWithId,
-    IReturnEvent,
+    IReturnEventWithId,
 } from '../../../../helpers/interfaces/event.interface';
 
 export class GetAllEventsUseCaseRep {
@@ -12,7 +12,7 @@ export class GetAllEventsUseCaseRep {
         this.model = EventModel;
     }
 
-    public async exec(): Promise<IReturnEvent[]> {
+    public async exec(): Promise<IReturnEventWithId[]> {
         return await this.model.find({});
     }
 }

@@ -4,7 +4,7 @@ import {
     IDeletedEvents,
     IEventQuery,
     IEventWithId,
-    IReturnEvent,
+    IReturnEventWithId,
     TypeDayOfWeek,
 } from '../../../../helpers/interfaces/event.interface';
 
@@ -16,7 +16,7 @@ export class DeleteManyEventsUseCaseRep {
     }
 
     public async exec(query: TypeDayOfWeek): Promise<IDeletedEvents> {
-        const eventsToBeDeleted: IReturnEvent[] = await this.getQuery({
+        const eventsToBeDeleted: IReturnEventWithId[] = await this.getQuery({
             dayOfWeek: query,
         });
 
@@ -29,7 +29,7 @@ export class DeleteManyEventsUseCaseRep {
         return deleteResponse;
     }
 
-    private async getQuery(query: IEventQuery): Promise<IReturnEvent[]> {
+    private async getQuery(query: IEventQuery): Promise<IReturnEventWithId[]> {
         return await this.model.find(query);
     }
 }

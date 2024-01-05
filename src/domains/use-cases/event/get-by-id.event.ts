@@ -1,15 +1,15 @@
 import { NotFoundError } from '../../../helpers/errors';
-import { IReturnEvent } from '../../../helpers/interfaces/event.interface';
-import { GetEventsByIdUseCaseRep } from '../../../infra/repositories/use-cases/event/get-by-id.event';
+import { IReturnEventWithId } from '../../../helpers/interfaces/event.interface';
+import { GetEventByIdUseCaseRep } from '../../../infra/repositories/use-cases/event/get-by-id.event';
 
 export class GetEventByIdUseCaseSer {
-    private repository: GetEventsByIdUseCaseRep;
+    private repository: GetEventByIdUseCaseRep;
 
     constructor() {
-        this.repository = new GetEventsByIdUseCaseRep();
+        this.repository = new GetEventByIdUseCaseRep();
     }
 
-    public async exec(id: string): Promise<IReturnEvent> {
+    public async exec(id: string): Promise<IReturnEventWithId> {
         const event = await this.repository.exec(id);
 
         if (!event) {
