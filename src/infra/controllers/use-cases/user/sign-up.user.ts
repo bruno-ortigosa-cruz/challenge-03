@@ -16,7 +16,6 @@ export class SignUpUseCaseCon {
 
     public async exec(req: Request, res: Response) {
         const payload = req.body as IUserRequest;
-
         const user: IUserNoPassword = await this.service.exec(payload);
 
         res.status(StatusCodes.CREATED).json(user);
