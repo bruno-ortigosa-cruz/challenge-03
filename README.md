@@ -65,8 +65,6 @@ When entering the link it will redirect you for the home page, where you can go 
 
 ## API Endpoints
 
-The endpoints refer to <>
-
 | Auth | Method | Endpoint         | Referent to | Description                               |
 | ---- | ------ | ---------------- | ----------- | ----------------------------------------- |
 | ---- | POST   | `/users/sign-up` | **User**    | Add a new user                            |
@@ -76,5 +74,9 @@ The endpoints refer to <>
 | JWT  | DELETE | `/events`        | **Event**   | Delete events from a specific day of week |
 | JWT  | GET    | `/events/:id`    | **Event**   | Get event from a specific id              |
 | JWT  | DELETE | `/events/:id`    | **Event**   | Delete event from a specific id           |
+
+The endpoints refer to:
+- `http://localhost:<PORT>/api/v1<endpoint>`
+- `https://challenge-03.onrender.com/api/v1<endpoint>`
 
 > ***Note***: Routes with JWT authentication are only accessible after sign in and obtention of the Bearer Token
