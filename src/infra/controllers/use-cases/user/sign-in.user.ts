@@ -19,7 +19,7 @@ export class SignInUseCaseCon {
 
         const response: ISignInReturn = await this.service.exec(payload);
 
-        res.setHeader('Authorization', 'Bearer ' + response.token);
+        res.header('Authorization', 'Bearer ' + response.token);
         res.status(StatusCodes.OK).json(response.user);
     }
 }
