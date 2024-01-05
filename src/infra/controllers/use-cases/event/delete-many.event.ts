@@ -15,7 +15,6 @@ export class DeleteManyEventsUseCaseCon {
         const dayOfWeek = req.query.dayOfWeek as TypeDayOfWeek;
         const events = await this.service.exec(dayOfWeek);
 
-        if (!events) res.sendStatus(StatusCodes.NO_CONTENT);
-        else res.status(StatusCodes.OK).json(events);
+        res.status(StatusCodes.OK).json(events);
     }
 }
