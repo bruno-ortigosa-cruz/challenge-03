@@ -14,7 +14,7 @@ export class CreateEventUseCaseCon {
     public async exec(req: RequestWithUser, res: Response) {
         const user = req.user;
         const body = req.body;
-        const id = req.user?._id;
+        const id = req.user!._id;
         const event = await this.service.exec(user, body, id);
         res.status(StatusCodes.CREATED).json(event);
     }
