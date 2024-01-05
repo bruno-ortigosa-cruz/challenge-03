@@ -45,15 +45,16 @@ After all the configuration is set up
 4. If you want to test it with swagger enter the URL `localhost:<PORT>/api-docs/` (change `<PORT>` to your port (default `3000`))
 
 ### Scripts
-| Script          | Description                                               |
-| --------------- | --------------------------------------------------------- |
-| `build`         | Compiles the TypeScript files                             |
-| `start`         | Runs the server                                           |
-| `dev`           | Runs tsc-watch library to keep watch on your file changes |
-| `lint`          | Runs ESLint                                               |
-| `test`          | Runs jest                                                 |
-| `test:verbose`  | Runs jest in verbose mode                                 |
-| `test:coverage` | Runs the jest coverage on all /src files                  |
+| Script                   | Description                                               |
+| ------------------------ | --------------------------------------------------------- |
+| `build`                  | Compiles the TypeScript files                             |
+| `start`                  | Runs the server                                           |
+| `dev`                    | Runs tsc-watch library to keep watch on your file changes |
+| `lint`                   | Runs ESLint                                               |
+| `test`                   | Runs jest                                                 |
+| `test:verbose`           | Runs jest in verbose mode                                 |
+| `test:coverage`          | Runs the automatic jest coverage                          |
+| `test:coverage:complete` | Runs the jest coverage on all /src files                  |
 
 ## Render Deploy
 The project is deployed on Render [here](https://challenge-03.onrender.com/)
