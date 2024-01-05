@@ -11,7 +11,8 @@
     "lint": "eslint src --fix",
     "test": "jest",
     "test:verbose": "jest --verbose",
-    "test:coverage": "jest --coverage --collectCoverageFrom='./src/**/*'"
+    "test:coverage": "jest --coverage",
+    "test:coverage:complete": "jest --coverage --collectCoverageFrom='./src/**/*'"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
